@@ -39,3 +39,4 @@ vg.sales<-vg.sales[!vg.sales$type3=="NA",]
 vg.sales<-vg.sales[!is.na(vg.sales$Genre),]
 vgc<-vg.sales[complete.cases(vg.sales),]
 ```
+![alt text](https://raw.githubusercontent.com/jacob-walsh/Video-Game-Sales/EDA Visuals/path/to/plot1.png)
