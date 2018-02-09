@@ -39,4 +39,103 @@ vg.sales<-vg.sales[!vg.sales$type3=="NA",]
 vg.sales<-vg.sales[!is.na(vg.sales$Genre),]
 vgc<-vg.sales[complete.cases(vg.sales),]
 ```
-![alt text](https://raw.githubusercontent.com/jacob-walsh/Video-Game-Sales/EDA Visuals/path/to/plot1.png)
+## EDA
+```
+c<-scales::seq_gradient_pal("blue")(seq(0,1,length.out=20))
+p1<-ggplot(plat.table, aes(x=reorder(Group.1, -x), y=x), fill=factor(Group.1))+
+    geom_col(fill=c)+
+  theme_bw()+
+  theme(title=(element_text(size=12)),axis.title=element_text(size=14), axis.text.x=element_text(size=12, angle=90),axis.text.y=element_text(size=12))+
+  labs(title="Figure 1: Global Sales by Platform", x="Platform", y="Global Sales (millions of units)")
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot1.png)
+```
+p2<-plot_ly(trend.df, x=~year, y=~na.sales, name="North America", type='scatter', mode='lines+markers') %>%
+  add_trace(y=~eu.sales, name="Europe", mode='lines+markers') %>%
+  add_trace(y=~jp.sales, name='Japan', mode='lines+markers')%>%
+  add_trace(y=~other.sales, name='Other', mode='lines+markers')%>%
+  layout(title="Figure 2: Total Video Game Sales by Year of Release", font=list(size=12,
+    color = 'black', face="bold"),xaxis=list(title="Year"), yaxis=list(title="Sales(in millions)"))
+
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot2.png)
+
+```
+p3<-ggplot(t1df, aes(x=Genre, y=Proportion, fill=Platform))+geom_col(position="dodge", col="black")+
+  labs(title="Figure 3: Genres in Consoles vs. PC", x="Genre",y="Proportion")+
+  scale_fill_manual(values=c("#3406F4","thistle4"))+
+  theme_bw()+
+  theme(text=(element_text(size=18)), axis.text.x=element_text(size=14,angle=45,hjust=1, vjust=1),plot.caption=element_text(size=12))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot3.png)
+```
+p4<-ggplot(ggodds, aes(x=Platform, y=Odds, fill=Genre))+
+  geom_bar(position=position_dodge(),stat="identity", col="black")+
+  labs(title="Figure 4: Odds vs. Nintendo", x="Platform", y="Odds Ratio")+
+  geom_hline(yintercept=1)+
+  geom_errorbar(aes(ymin=min, ymax=max), width=0.4, position=position_dodge(.9))+
+  theme_bw()+
+  theme(text=(element_text(size=16)), axis.text.x=element_text(size=16),plot.caption=element_text(size=12))+
+  scale_y_continuous(breaks=seq(0,6,1))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot4.png)
+```
+p5<-plot_ly(time.pxw, x=~time.pxw$Group.1, y=~time.pxw$x, color=~time.pxw$Group.2)%>%
+  add_lines() %>%
+  
+  layout(title="Figure 5: Global Sales of PS3, Wii, and Xbox 360",xaxis=list(title="Year of Release", titlefont=a), yaxis=list(title="Number of Games Sold (in millions)", titlefont=a))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot5.png)
+```
+p6<-ggplot(ggodds2, aes(x=Platform, y=Odds, fill=Genre, label=Platform))+
+  geom_bar(position=position_dodge(),stat="identity", col="black")+
+  labs(title="Figure 6: Odds Comparison of Genre by Platform",x="Platform", y="Odds Ratio")+
+  geom_hline(yintercept=1)+
+  geom_errorbar(aes(ymin=min, ymax=max), width=0.4, position=position_dodge(.9))+
+  theme_bw()+
+  theme(axis.text.x=element_text(size=14), aspect.ratio=0.3)+
+  scale_y_continuous(breaks=seq(0,6,1))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot6.png)
+```
+p7<- ggplot(vgc, aes(x=reorder(type3, -Critic_Score, FUN=median), y=Critic_Score)) +
+  geom_boxplot(fill=c, notch=TRUE) +
+  labs(title="Figure 7: Distribution of Critic Ratings by Platform", y="Metacritic Rating", x="Platform") +
+  geom_hline(yintercept=72)+
+  theme_bw()+
+  theme(text=(element_text(size=20)), axis.text.x=element_text(size=20),plot.caption=element_text(size=10))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot7.png)
+```
+c<-scales::seq_gradient_pal("blue")(seq(0,1,length.out=4))
+p8<-ggplot(vgc, aes(x=reorder(type3, -logsales, FUN=median), y=logsales)) +
+  geom_boxplot(fill=c, notch=TRUE) +
+  labs(title="Figure 8: Distribution of Sales by Platform",y="log(Global Sales)", x="Platform") +
+  geom_hline(yintercept=-1.237874)+
+  theme_bw()+
+  theme(text=(element_text(size=20)), axis.text.x=element_text(size=20),plot.caption=element_text(size=10))
+```
+
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot8.png)
+```
+c<-scales::seq_gradient_pal("green")(seq(0,1,length.out=11))
+
+p9<-ggplot(vgc, aes(x=reorder(Genre, -Critic_Score, FUN=median), y=Critic_Score)) +
+  geom_boxplot(fill=c, notch=TRUE) +
+  labs(title="Figure 9: Distribution of Critic Ratings by Genre",y="Metacritic Rating", x="Genre") +
+  geom_hline(yintercept=72)+
+  theme_bw()+
+  theme(text=(element_text(size=16)), axis.text.x=element_text(size=18,angle=45,hjust=1, vjust=1),plot.caption=element_text(size=14))
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot9.png)
+```
+p10<-ggplot(vgc, aes(x=Critic_Score, y=logsales, color=type3))+
+  geom_point()+
+  geom_smooth(method="lm", se=FALSE, size=1.3)+
+  theme_bw()+
+  theme(text=(element_text(size=16)), axis.text.x=element_text(size=18,angle=45,hjust=1, vjust=1),plot.caption=element_text(size=14))+
+  labs(title="Figure 10: Critic Rating vs. Global Sales", x="Critic Rating", y="Log(Global Sales)")
+```
+![Alt Text](https://github.com/jacob-walsh/Video-Game-Sales/blob/master/EDA%20Visuals/plot10.png)
+
+
